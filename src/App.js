@@ -13,6 +13,7 @@ export default class App extends Component {
   render() {
     return (
       <Router>
+        <h1> hello</h1>
         
         <NavBar/>
         <Routes>
