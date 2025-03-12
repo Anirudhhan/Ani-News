@@ -17,17 +17,20 @@ export default class News extends Component {
       totalResults: 0,
       hasMore: true, // Add a new state property to track if more data is available
     };
-    document.title = `${this.props.category} - Ani News`;
+    document.title = `${this.capitalize(this.props.category)} - Ani News`;
   }
 
   fetchNews = async (page = 1) => {
     this.setState({ loading: true });
 
     try {
+      this.props.setProgress(5);
       const url = `https://newsapi.org/v2/top-headlines?category=${this.props.category}&sortBy=popularity&apiKey=${this.props.apiKey}&page=${page}`;
       let response = await fetch(url);
+      this.props.setProgress(15);
       let data = await response.json();
-
+      this.props.setProgress(50);
+      
       // Check if we received any new articles
       const newArticles = data.articles || [];
       
@@ -36,8 +39,8 @@ export default class News extends Component {
         
         // Determine if there are more articles to fetch
         const hasMore = 
-          updatedArticles.length < data.totalResults && 
-          newArticles.length > 0; // Stop if we get an empty array
+        updatedArticles.length < data.totalResults && 
+        newArticles.length > 0; // Stop if we get an empty array
         
         return {
           loading: false,
@@ -47,10 +50,12 @@ export default class News extends Component {
           hasMore, // Update the hasMore flag
         };
       });
+      this.props.setProgress(80);
     } catch (error) {
       console.error("Error fetching news:", error);
       this.setState({ loading: false, hasMore: false });
     }
+    this.props.setProgress(100);
   };
 
   componentDidMount() {
@@ -63,19 +68,23 @@ export default class News extends Component {
     this.fetchNews(nextPage);
   };
 
+  capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  } 
+
   render() {
     return (
       <>
         <div className="container my-3 text-center">
           <h1
-            className="fw-bold"
+            className="fw-bold py-2"
             style={{
               background: "linear-gradient(45deg, rgb(96, 119, 145), rgb(56, 52, 61))",
               WebkitBackgroundClip: "text",
               color: "transparent",
             }}
           >
-            Today's Top News
+            Today's Top {this.capitalize(this.props.category)} News
           </h1>
         </div>
 
