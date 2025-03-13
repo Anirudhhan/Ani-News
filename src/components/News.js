@@ -58,6 +58,7 @@ const News = ({ category = "general", apiKey = "8bba7e74f9d042beb383f79c5641a0f5
             background: "linear-gradient(45deg, rgb(96, 119, 145), rgb(56, 52, 61))",
             WebkitBackgroundClip: "text",
             color: "transparent",
+            marginTop: "85px"
           }}
         >
           Today's Top {capitalize(category)} News
